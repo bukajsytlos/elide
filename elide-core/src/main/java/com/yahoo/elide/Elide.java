@@ -33,6 +33,7 @@ import com.yahoo.elide.parsers.GetVisitor;
 import com.yahoo.elide.parsers.PatchVisitor;
 import com.yahoo.elide.parsers.PostVisitor;
 import com.yahoo.elide.security.User;
+import com.yahoo.elide.utils.coerce.CoerceUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -76,6 +77,10 @@ public class Elide {
         this.dataStore = elideSettings.getDataStore();
         this.dataStore.populateEntityDictionary(elideSettings.getDictionary());
         this.mapper = elideSettings.getMapper();
+
+        elideSettings.getSerdes().forEach((targetType, serde) -> {
+            CoerceUtil.register(targetType, serde);
+        });
     }
 
     /**
